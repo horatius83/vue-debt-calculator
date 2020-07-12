@@ -28,7 +28,7 @@ export function createPaymentPlan(
         if(leftOver === 0) {
             return paymentPlan;
         }
-        for(const [loanName, payment] of additionalPayments) {
+        for(const [loanName, payment] of Object.entries(additionalPayments)) {
             const lastPayment = getLastPayment(paymentPlan.get(loanName)) as Payment;
             lastPayment.amountLeft = payment.amountLeft;
             lastPayment.amountPaid += payment.amountPaid;
@@ -44,7 +44,7 @@ export function createPaymentPlan(
             return paymentPlan;
         }
         // Otherwise, calculate minimum payments 
-        for(const [loanName, payments] of paymentPlan) {
+        for(const [loanName, payments] of Object.entries(paymentPlan)) {
             const minimumPayment = minimumPaymentLookup.get(loanName) as number;
             const lastPayment = getLastPayment(payments);
             if(lastPayment && lastPayment.amountLeft > 0) {
