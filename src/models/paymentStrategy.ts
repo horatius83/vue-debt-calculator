@@ -1,6 +1,8 @@
 import { Payment } from './payment';
 import { Loan } from './loan';
 
+export type PaymentStrategy = (payments: Map<string, Payment[]>, loans: Loan[], additionalPayment: number) => [number, Map<string, Payment>];
+
 export function avalanche(payments: Map<string, Payment[]>, loans: Loan[], additionalPayment: number): [number, Map<string, Payment>] {
     const priorityList = (loans
         .map<[Loan, (Payment | undefined)]>(ln => [ln, getLastPayment(payments.get(ln.name))])

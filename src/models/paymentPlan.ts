@@ -2,6 +2,10 @@ import { Loan } from './loan';
 import { Payment } from './payment';
 import { getLastPayment } from './paymentStrategy';
 
+export function getMinimumPayments(maxNumberOfPayments: number, loans: Loan[]): number {
+    throw new Error("Not implemented");
+}
+
 export function createPaymentPlan(
     loans: Loan[], 
     maxNumberOfPayments: number, 
