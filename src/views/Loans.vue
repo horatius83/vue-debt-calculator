@@ -3,7 +3,7 @@
         <div id="loans-summary-body">
             <h1>Test</h1>
             <Loans v-bind:loans="loans" v-on:delete="deleteLoan"></loans>
-            <new-loan v-on:add-new-loan="addNewLoan"></new-loan>
+            <!--<new-loan v-on:add-new-loan="addNewLoan"></new-loan>-->
         </div>
     </div>
 </template>
