@@ -1,6 +1,8 @@
 import { Loan } from '@/models/loan';
 import { avalanche, PaymentStrategy } from '@/models/paymentStrategy';
 
+// https://blog.logrocket.com/how-to-write-a-vue-js-app-completely-in-typescript/
+
 const loanServiceKey = 'debt-calculator-loans';
 
 function saveJsonObject(key: string, thingToSave: object) {
