@@ -1,4 +1,4 @@
-# vue-debt-calculator
+# vue3-debt-calculator
 
 ## Project setup
 ```
