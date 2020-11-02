@@ -14,6 +14,9 @@
             <td>{{loan.minimum}}</td>
         </tr>
     </table>
+    <router-link to="/addloan">
+        <button>Add Loan</button>
+    </router-link>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
