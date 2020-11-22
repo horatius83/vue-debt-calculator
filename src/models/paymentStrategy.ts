@@ -29,3 +29,7 @@ export function avalanche(payments: Map<string, Payment[]>, loans: Loan[], addit
     return [additionalPayment, additionalPayments];
 }
 
+const strategyMap = new Map<string, PaymentStrategy>([
+    ["avalanche", avalanche]
+]);
+export {strategyMap};
