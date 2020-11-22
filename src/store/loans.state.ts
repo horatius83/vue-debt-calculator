@@ -35,4 +35,12 @@ const getStartingDate = () => loansState.value.startingDate;
 const setStrategy = (strategy: string) => loansState.value.strategy = strategy;
 const getStrategy = () => [loansState.value.strategy, strategyMap.get(loansState.value.strategy)];
 
-export {addLoan, getLoans, deleteLoan, setStartingDate, getStartingDate, setStrategy, getStrategy};
+export {
+    addLoan, 
+    getLoans, 
+    deleteLoan, 
+    setStartingDate, 
+    getStartingDate, 
+    setStrategy, 
+    getStrategy
+};
