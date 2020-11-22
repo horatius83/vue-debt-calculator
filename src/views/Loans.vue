@@ -13,7 +13,7 @@
             <td>{{ loan.principal }}</td>
             <td>{{ loan.interest }}</td>
             <td>{{ loan.minimum }}</td>
-            <td><button>Delete</button></td>
+            <td><button v-on:click="deleteLoan(index)">Delete</button></td>
         </tr>
     </table>
     <div class="add-loan">
@@ -30,7 +30,7 @@
 </template>
 <script lang="ts">
 import { Loan } from '@/models/loan';
-import { addLoan, getLoans } from '@/store/loans.state';
+import { addLoan, deleteLoan, getLoans } from '@/store/loans.state';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -60,6 +60,9 @@ export default defineComponent({
                 this.interest = 0;
                 this.minimum = 0;
             }
+        },
+        deleteLoan(index: number) {
+            deleteLoan(index);
         }
     }
 });
