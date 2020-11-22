@@ -19,8 +19,9 @@
     </router-link>
 </template>
 <script lang="ts">
+import { Loan } from '@/models/loan';
+import { getLoans } from '@/store/loans.state';
 import { defineComponent } from 'vue';
-// import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
 export default defineComponent({
   name: 'Loans',
@@ -28,11 +29,14 @@ export default defineComponent({
     // HelloWorld,
   },
   created() {
-      //this.loans = this.$store.loans;
+      const loans = getLoans();
+      for(const loan of loans) {
+          this.loans.push(loan);
+      }
   },
   data() {
       return {
-          loans: []
+          loans: new Array<Loan>()
       }
   },
   
