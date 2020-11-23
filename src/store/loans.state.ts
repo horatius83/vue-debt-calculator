@@ -8,15 +8,6 @@ const loansState = ref({
     strategy: "Avalanche"
 });
 
-const localStorageKey = 'U1eaf8698-92d7-4177-bd92-7f301d62fa65';
-const updateLocalStorage = (state: {loans: Loan[]; startingDate: Date; strategy: string}) => {
-    localStorage.setItem(localStorageKey, JSON.stringify({
-        loans: state.loans, 
-        startingDate: state.startingDate,
-        strategy: state.strategy
-    }));
-};
-
 const addLoan = (loan: Loan) => {
     loansState.value.loans.push(loan);
 };
