@@ -30,6 +30,6 @@ export function avalanche(payments: Map<string, Payment[]>, loans: Loan[], addit
 }
 
 const strategyMap = new Map<string, PaymentStrategy>([
-    ["avalanche", avalanche]
+    ["Avalanche", avalanche]
 ]);
 export {strategyMap};

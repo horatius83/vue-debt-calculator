@@ -3,7 +3,9 @@ import { Payment } from './payment';
 import { getLastPayment } from './paymentStrategy';
 
 export function getMinimumPayments(maxNumberOfPayments: number, loans: Loan[]): number {
-    throw new Error("Not implemented");
+    return loans
+        .map(ln => ln.getMinimumPayment(maxNumberOfPayments))
+        .reduce((a,b) => a + b);
 }
 
 export function createPaymentPlan(
@@ -20,7 +22,7 @@ export function createPaymentPlan(
         return [ln.name, [newPayment]]
     }));
     // Determine if total payment exceeds the minimum required payment
-    let minimumTotalPayment = Object.values(paymentPlan).reduce((acc, xs) => acc + xs[0], 0);
+    const minimumTotalPayment = Object.values(paymentPlan).reduce((acc, xs) => acc + xs[0], 0);
     if(minimumTotalPayment > totalPayment) {
         throw new Error(`Can not create a payment plan with total payment ${totalPayment} as the minimum is ${minimumTotalPayment}`);
     }
