@@ -3,8 +3,8 @@
     <div id="payment-plan-parameters">
         <label for="maximumPayments">Maximum Payments</label>
         <input type="number" min="0" :max="maximumPayments" name="maximumPayments" v-model.number="totalPayment">
-        <label for="paymentAmount" :min="minimumPaymentAmount">Payment Amount</label>
-        <input type="number" name="paymentAmount" v-model.number="paymentAmount">
+        <label for="paymentAmount" >Payment Amount</label>
+        <input type="number" :min="minimumPaymentAmount" name="paymentAmount" v-model.number="paymentAmount">
     </div>
     <div class="payment-month">
         <h3></h3>
