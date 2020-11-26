@@ -33,6 +33,10 @@ export default defineComponent({
             paymentAmount: 0
         }
     },
+    created() {
+        this.totalPayment = this.maximumPayments;
+        this.paymentAmount = this.minimumPaymentAmount;
+    },
     computed: {
         maximumPayments() {
             return getMaximumPayments();
