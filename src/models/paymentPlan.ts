@@ -5,7 +5,7 @@ import { getLastPayment } from './paymentStrategy';
 export function getMinimumPayments(maxNumberOfPayments: number, loans: Loan[]): number {
     return loans
         .map(ln => ln.getMinimumPayment(maxNumberOfPayments))
-        .reduce((a,b) => a + b);
+        .reduce((a,b) => a + b, 0);
 }
 
 export function createPaymentPlan(

@@ -2,7 +2,9 @@
     <h2>Payment Plan</h2>
     <div id="payment-plan-parameters">
         <label for="maximumPayments">Maximum Payments</label>
-        <input type="number" min="0" max="120" name="maximumPayments" v-model.number="totalPayments">
+        <input type="number" min="0" :max="maximumPayments" name="maximumPayments" v-model.number="totalPayment">
+        <label for="paymentAmount" :min="minimumPaymentAmount">Payment Amount</label>
+        <input type="number" name="paymentAmount" v-model.number="paymentAmount">
     </div>
     <div class="payment-month">
         <h3></h3>
@@ -19,7 +21,7 @@
 </template>
 <script lang="ts">
 import { Payment } from '@/models/payment';
-import { createPaymentPlan } from '@/models/paymentPlan';
+import { createPaymentPlan, getMinimumPayments } from '@/models/paymentPlan';
 import { getLoans, getMaximumPayments, getStartingDate, getStrategy } from '@/store/loans.state';
 import { defineComponent } from 'vue';
 
@@ -27,10 +29,17 @@ export default defineComponent({
     name: 'PaymentPlan',
     data() {
         return {
-            totalPayment: 0
+            totalPayment: 0,
+            paymentAmount: 0
         }
     },
     computed: {
+        maximumPayments() {
+            return getMaximumPayments();
+        },
+        minimumPaymentAmount() {
+            return getMinimumPayments(getMaximumPayments(), getLoans());
+        },
         paymentPlan() {
             const [strategyName, strategy] = getStrategy();
             if(!strategy) {
