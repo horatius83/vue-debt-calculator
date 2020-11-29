@@ -22,9 +22,3 @@ export class Loan {
         );
     }
 }
-
-export function simpleInterest(principal: number, rateInPercent: number, timeInYears: number) {
-    const rate = rateInPercent / 100.0;
-    return principal * (1.0 + rate * timeInYears);
-}
-

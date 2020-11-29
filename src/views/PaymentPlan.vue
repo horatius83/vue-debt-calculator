@@ -6,8 +6,8 @@
         <label for="paymentAmount" >Payment Amount</label>
         <input type="number" :min="minimumPaymentAmount" name="paymentAmount" v-model.number="paymentAmount">
     </div>
-    <div class="payment-month">
-        <h3></h3>
+    <div class="payment-month" v-for="(month, index) in paymentPlan" :key="index">
+        <h3>{{month.month}}</h3>
         <table>
             <thead>
                 <th>Loan</th>
@@ -20,6 +20,7 @@
     </div>
 </template>
 <script lang="ts">
+import { Loan } from '@/models/loan';
 import { Payment } from '@/models/payment';
 import { createPaymentPlan, getMinimumPayments } from '@/models/paymentPlan';
 import { getLoans, getMaximumPayments, getStartingDate, getStrategy } from '@/store/loans.state';
@@ -38,6 +39,9 @@ export default defineComponent({
         this.paymentAmount = this.minimumPaymentAmount;
     },
     computed: {
+        startingDate() {
+            return getStartingDate();
+        },
         maximumPayments() {
             return getMaximumPayments();
         },
@@ -53,7 +57,17 @@ export default defineComponent({
             const startingDate = getStartingDate();
             const maximumPayments = getMaximumPayments();
             const paymentPlan = createPaymentPlan(loans, maximumPayments, this.totalPayment, strategy);
-            return paymentPlan;
+            const maximumPaymentPlanLength = [...paymentPlan.values()]
+                .reduce((acc,x) => x.length > acc ? x.length : acc, 0);
+            const dateTimeFormatter = new Intl.DateTimeFormat([...navigator.languages], {year: 'numeric', month: 'long'});
+            const paymentsByMonth = new Array<{month: string; loans: Array<Loan>}>();
+            debugger;
+            for(let i=0;i<maximumPaymentPlanLength;++i) {
+                const month = new Date(startingDate.getFullYear(), startingDate.getMonth() + i, 1);
+                const monthAsString = dateTimeFormatter.format(month);
+                paymentsByMonth.push({month: monthAsString, loans: []});
+            }
+            return paymentsByMonth;
         }
     }
 });
