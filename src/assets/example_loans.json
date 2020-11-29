@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Test 1",
+        "principal": 1000,
+        "interest": 0.2,
+        "minimum": 10
+    },
+    {
+        "name": "Test 2",
+        "principal": 2000,
+        "interest": 0.2,
+        "minimum": 20
+    },
+    {
+        "name": "Test 3",
+        "principal": 3000,
+        "interest": 0.2,
+        "minimum": 30
+    }
+]

@@ -30,6 +30,14 @@
         <input type="number" name="minimum" id="minimum" v-model.number="minimum" >
         <button v-on:click="addLoan">Submit</button>
     </div>
+    <div class="add-loan-from-file">
+        <h2>Add Loans From File</h2>
+        <input  type="file" v-on:change="uploadLoans($event.target.files)">
+    </div>
+    <div class="save-loans-to_file">
+        <h2>Save Loans To File</h2>
+        
+    </div>
 </template>
 <script lang="ts">
 import { Loan } from '@/models/loan';
@@ -66,6 +74,27 @@ export default defineComponent({
         },
         deleteLoan(index: number) {
             deleteLoan(index);
+        },
+        uploadLoans(files: FileList) {
+            if(files.length <= 0) {
+                console.log('No files to upload');
+                return;
+            }
+            const fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                const contents = e?.target?.result as string;
+                if (!contents) {
+                    console.log('Could not read file contents');
+                    return;
+                }
+                const loans = JSON.parse(contents) as Array<Loan>;
+                for (const loan of loans) {
+                    addLoan(loan);
+                }
+            }
+            for (const file of files) {
+                fileReader.readAsText(file);
+            }
         }
     }
 });
