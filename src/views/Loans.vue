@@ -36,7 +36,7 @@
     </div>
     <div class="save-loans-to_file">
         <h2>Save Loans To File</h2>
-        
+        <a :href="loansFile" download="loans.json">Click here to download loans</a>
     </div>
 </template>
 <script lang="ts">
@@ -53,12 +53,16 @@ export default defineComponent({
         name: '',
         principal: 0,
         interest: 0,
-        minimum: 0,
+        minimum: 0
       }
   },
   computed: {
       loans() {
           return getLoans();
+      },
+      loansFile() {
+          const json = new Blob([JSON.stringify(getLoans())], {type: "text/json"});
+          return URL.createObjectURL(json);
       }
   },
   methods: {
