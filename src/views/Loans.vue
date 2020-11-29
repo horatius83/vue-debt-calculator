@@ -80,6 +80,7 @@ export default defineComponent({
             deleteLoan(index);
         },
         uploadLoans(files: FileList) {
+            console.log(`Uploading files... ${new Date()}`);
             if(files.length <= 0) {
                 console.log('No files to upload');
                 return;
