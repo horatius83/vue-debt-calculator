@@ -92,7 +92,7 @@ export default defineComponent({
                     return;
                 }
                 const loans = JSON.parse(contents) as Array<Loan>;
-                for (const loan of loans) {
+                for (const loan of loans.map(x => new Loan(x.name, x.principal, x.interest, x.minimum))) {
                     addLoan(loan);
                 }
             }
