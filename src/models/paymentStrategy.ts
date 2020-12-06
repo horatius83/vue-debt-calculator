@@ -9,6 +9,7 @@ export function getLastPayment(payments: (Payment[] | undefined)): (Payment | un
     }
 }
 
+/*
 export function avalanche(payments: Map<string, Payment[]>, loans: Loan[], additionalPayment: number): [number, Map<string, Payment>] {
     const priorityList = (loans
         .map<[Loan, (Payment | undefined)]>(ln => [ln, getLastPayment(payments.get(ln.name))])
@@ -28,8 +29,37 @@ export function avalanche(payments: Map<string, Payment[]>, loans: Loan[], addit
     }
     return [additionalPayment, additionalPayments];
 }
+*/
+
+const avalanche = createPaymentStrategy(([a, _], [b, _]) => b.interest - a.interest);
+const snowball = createPaymentStrategy(([a, _], [b, _]) => a.principal - b.principal);
+
+function createPaymentStrategy(strategy: (a: [Loan, Payment], b: [Loan, Payment]) => number): PaymentStrategy {
+    function s(payments: Map<string, Payment[]>, loans: Loan[], additionalPayment: number): [number, Map<string, Payment>] {
+        const priorityList = (loans
+            .map<[Loan, (Payment | undefined)]>(ln => [ln, getLastPayment(payments.get(ln.name))])
+            .filter(([_, lastPayment]) => {
+                return lastPayment && lastPayment.amountLeft > 0 ? true : false;
+            }) as Array<[Loan, Payment]>)
+            .sort(strategy);
+        const additionalPayments = new Map<string, Payment>();
+        for(const [ln, lastPayment] of priorityList) {
+            if(lastPayment.amountLeft > additionalPayment) {
+                additionalPayments.set(ln.name, new Payment(lastPayment.amountLeft - additionalPayment, additionalPayment));
+                return [0, additionalPayments];
+            } else {
+                additionalPayments.set(ln.name, new Payment(0, lastPayment.amountLeft));
+                additionalPayment -= lastPayment.amountLeft;
+            }
+        }
+        return [additionalPayment, additionalPayments];
+    }
+    return s;
+}
 
 const strategyMap = new Map<string, PaymentStrategy>([
-    ["Avalanche", avalanche]
+    ["Avalanche", avalanche],
+    ['Snowball', snowball]
 ]);
-export {strategyMap};
+
+export {strategyMap, avalanche, snowball};
