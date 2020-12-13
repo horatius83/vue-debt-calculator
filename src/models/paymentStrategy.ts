@@ -9,27 +9,6 @@ export function getLastPayment(payments: (Payment[] | undefined)): (Payment | un
     }
 }
 
-/*
-export function avalanche(payments: Map<string, Payment[]>, loans: Loan[], additionalPayment: number): [number, Map<string, Payment>] {
-    const priorityList = (loans
-        .map<[Loan, (Payment | undefined)]>(ln => [ln, getLastPayment(payments.get(ln.name))])
-        .filter(([_, lastPayment]) => {
-            return lastPayment && lastPayment.amountLeft > 0 ? true : false;
-        }) as Array<[Loan, Payment]>)
-        .sort(([a, _], [b, __]) => b.interest - a.interest);
-    const additionalPayments = new Map<string, Payment>();
-    for(const [ln, lastPayment] of priorityList) {
-        if(lastPayment.amountLeft > additionalPayment) {
-            additionalPayments.set(ln.name, new Payment(lastPayment.amountLeft - additionalPayment, additionalPayment));
-            return [0, additionalPayments];
-        } else {
-            additionalPayments.set(ln.name, new Payment(0, lastPayment.amountLeft));
-            additionalPayment -= lastPayment.amountLeft;
-        }
-    }
-    return [additionalPayment, additionalPayments];
-}
-*/
 export function createPaymentStrategy(strategy: (a: [Loan, Payment], b: [Loan, Payment]) => number): PaymentStrategy {
     function s(payments: Map<string, Payment[]>, loans: Loan[], additionalPayment: number): [number, Map<string, number>] {
         const priorityList = (loans
@@ -40,7 +19,6 @@ export function createPaymentStrategy(strategy: (a: [Loan, Payment], b: [Loan, P
             .sort(strategy);
         const additionalPayments = new Map<string, number>();
         for(const [ln, lastPayment] of priorityList) {
-            console.log('loop');
             if(lastPayment.amountLeft > additionalPayment) {
                 additionalPayments.set(ln.name, additionalPayment);
                 return [0, additionalPayments];
