@@ -1,6 +1,6 @@
 import { Loan } from './loan';
 import { Payment } from './payment';
-import { getLastPayment } from './paymentStrategy';
+import { getLastPayment, PaymentStrategy } from './paymentStrategy';
 
 export function getMinimumPayments(maxNumberOfPayments: number, loans: Loan[]): number {
     return loans
@@ -12,7 +12,7 @@ export function createPaymentPlan(
     loans: Loan[], 
     maxNumberOfPayments: number, 
     totalPayment: number, 
-    paymentStrategy: (payments: Map<string, Payment[]>, loans: Loan[], additionalPayment: number) => [number, Map<string, Payment>] 
+    paymentStrategy: PaymentStrategy
 ): Map<string, Payment[]> {
     const minimumPaymentLookup = new Map(loans.map(ln => [ln.name, ln.getMinimumPayment(maxNumberOfPayments)]));
     // Create initial minimum payments
@@ -36,8 +36,8 @@ export function createPaymentPlan(
         }
         for(const [loanName, payment] of Object.entries(additionalPayments)) {
             const lastPayment = getLastPayment(paymentPlan.get(loanName)) as Payment;
-            lastPayment.amountLeft = payment.amountLeft;
-            lastPayment.amountPaid += payment.amountPaid;
+            lastPayment.amountLeft -= payment;
+            lastPayment.amountPaid += payment;
         }
         // If the total left is 0 then return
         const areLoansPaidOff = Object.values(paymentPlan)
