@@ -1,8 +1,8 @@
 <template>
   <div id="nav">
-    <router-link to="/about">About</router-link> |
     <router-link to="/loans">Loans</router-link> |
-    <router-link to="/paymentplan">Payment Plan</router-link>
+    <router-link to="/paymentplan">Payment Plan</router-link> |
+    <router-link to="/about">About</router-link> 
   </div>
   <router-view/>
 </template>
@@ -27,5 +27,8 @@
       color: #42b983;
     }
   }
+}
+table {
+  width: 100%;
 }
 </style>

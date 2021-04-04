@@ -49,7 +49,6 @@ export default defineComponent({
             return getMinimumPayments(getMaximumPayments(), getLoans());
         },
         paymentPlan(): Array<{month: string; payments: Map<string, Payment>}> {
-            debugger;
             const [_, strategy] = getStrategy();
             if(!strategy) {
                 return [];
@@ -60,6 +59,7 @@ export default defineComponent({
             if(!loans.length || !startingDate || !maximumPayments) {
                 return [];
             }
+            debugger;
             const paymentPlan = createPaymentPlan(loans, maximumPayments, this.totalPayment, strategy);
             const maximumPaymentPlanLength = [...paymentPlan.values()]
                 .reduce((acc,x) => x.length > acc ? x.length : acc, 0);

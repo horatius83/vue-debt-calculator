@@ -14,6 +14,7 @@ export function createPaymentPlan(
     totalPayment: number, 
     paymentStrategy: PaymentStrategy
 ): Map<string, Payment[]> {
+    debugger;
     const minimumPaymentLookup = new Map(loans.map(ln => [ln.name, ln.getMinimumPayment(maxNumberOfPayments)]));
     // Create initial minimum payments
     const paymentPlan = new Map(loans.map(ln => {
@@ -22,7 +23,10 @@ export function createPaymentPlan(
         return [ln.name, [newPayment]]
     }));
     // Determine if total payment exceeds the minimum required payment
-    const minimumTotalPayment = Object.values(paymentPlan).reduce((acc, xs) => acc + xs[0], 0);
+    const paymentPlanValues = [...paymentPlan.values()];
+    const minimumTotalPayment: number = paymentPlanValues 
+        .filter(x => x.length)
+        .reduce((acc, xs) => acc + xs[0].amountPaid, 0);
     if(minimumTotalPayment > totalPayment) {
         throw new Error(`Can not create a payment plan with total payment ${totalPayment} as the minimum is ${minimumTotalPayment}`);
     }
@@ -34,13 +38,13 @@ export function createPaymentPlan(
         if(leftOver === 0) {
             return paymentPlan;
         }
-        for(const [loanName, payment] of Object.entries(additionalPayments)) {
-            const lastPayment = getLastPayment(paymentPlan.get(loanName)) as Payment;
+        for(const [loanName, payment] of additionalPayments.entries()) {
+            const lastPayment: Payment = getLastPayment(paymentPlan.get(loanName)) as Payment;
             lastPayment.amountLeft -= payment;
             lastPayment.amountPaid += payment;
         }
         // If the total left is 0 then return
-        const areLoansPaidOff = Object.values(paymentPlan)
+        const areLoansPaidOff = paymentPlanValues 
             .map(pp => getLastPayment(pp))
             .reduce((acc, p) => p 
                 ? acc || p.amountLeft > 0 
@@ -50,7 +54,7 @@ export function createPaymentPlan(
             return paymentPlan;
         }
         // Otherwise, calculate minimum payments 
-        for(const [loanName, payments] of Object.entries(paymentPlan)) {
+        for(const [loanName, payments] of paymentPlan.entries()) {
             const minimumPayment = minimumPaymentLookup.get(loanName) as number;
             const lastPayment = getLastPayment(payments);
             if(lastPayment && lastPayment.amountLeft > 0) {
