@@ -48,24 +48,31 @@ export default defineComponent({
         minimumPaymentAmount() {
             return getMinimumPayments(getMaximumPayments(), getLoans());
         },
-        paymentPlan() {
-            const [strategyName, strategy] = getStrategy();
+        paymentPlan(): Array<{month: string; payments: Map<string, Payment>}> {
+            debugger;
+            const [_, strategy] = getStrategy();
             if(!strategy) {
-                return new Map<string, Payment[]>();
+                return [];
             }
             const loans = getLoans();
             const startingDate = getStartingDate();
             const maximumPayments = getMaximumPayments();
+            if(!loans.length || !startingDate || !maximumPayments) {
+                return [];
+            }
             const paymentPlan = createPaymentPlan(loans, maximumPayments, this.totalPayment, strategy);
             const maximumPaymentPlanLength = [...paymentPlan.values()]
                 .reduce((acc,x) => x.length > acc ? x.length : acc, 0);
             const dateTimeFormatter = new Intl.DateTimeFormat([...navigator.languages], {year: 'numeric', month: 'long'});
-            const paymentsByMonth = new Array<{month: string; loans: Array<Loan>}>();
-            debugger;
+            const paymentsByMonth = new Array<{month: string; payments: Map<string, Payment>}>();
             for(let i=0;i<maximumPaymentPlanLength;++i) {
                 const month = new Date(startingDate.getFullYear(), startingDate.getMonth() + i, 1);
                 const monthAsString = dateTimeFormatter.format(month);
-                paymentsByMonth.push({month: monthAsString, loans: []});
+                const payments = new Map(Object.entries(paymentPlan)
+                    .filter(e => e[1].length < i) // if the payments have ceased then don't try access them
+                    .map(e => [e[0], e[1][i]]) // get mapping of loan-name to the payment for this month
+                );
+                paymentsByMonth.push({month: monthAsString, payments});
             }
             return paymentsByMonth;
         }

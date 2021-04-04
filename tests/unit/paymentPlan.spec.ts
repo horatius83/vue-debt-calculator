@@ -48,6 +48,5 @@ describe('paymentPlan', () => {
 
             expect(() => createPaymentPlan(loans, maximumNumberOfPayments, payment, avalanche)).to.throw();
         });
-        
     });
 });
